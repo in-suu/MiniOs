@@ -206,6 +206,7 @@ public class CPUSchedulingPanel extends JPanel {
         qRight.setOpaque(false);
 
         JButton btnAddJob = RetroTheme.createRetroButton("+ ADD", RetroTheme.BTN_DARK, RetroTheme.ACCENT_CYAN);
+        btnAddJob.setMnemonic('A');
         btnAddJob.setFont(new Font("Consolas", Font.BOLD, 9));
         btnAddJob.addActionListener(e -> {
             int n = inputModel.getRowCount() + 1;
@@ -214,6 +215,7 @@ public class CPUSchedulingPanel extends JPanel {
         });
 
         JButton btnRemoveJob = RetroTheme.createRetroButton("- REMOVE", RetroTheme.BTN_DARK, RetroTheme.ACCENT_PINK);
+        btnRemoveJob.setMnemonic('R');
         btnRemoveJob.setFont(new Font("Consolas", Font.BOLD, 9));
         btnRemoveJob.addActionListener(e -> {
             int sel = inputTable.getSelectedRow();
@@ -338,7 +340,7 @@ public class CPUSchedulingPanel extends JPanel {
         p.add(Box.createVerticalStrut(3));
 
         // Dedicated 16-Bit Arcade Cabinet Button
-        JButton btnArcadeTapper = new JButton("👾  PLAY KERNEL TAPPER // 16-BIT ARCADE") {
+        JButton btnArcadeTapper = new JButton("PLAY KERNEL TAPPER // 16-BIT ARCADE") {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
@@ -352,6 +354,8 @@ public class CPUSchedulingPanel extends JPanel {
                 super.paintComponent(g);
             }
         };
+        btnArcadeTapper.setIcon(new ImageIcon(PixelSprites.createAlienSprite(14, RetroTheme.ACCENT_YELLOW)));
+        btnArcadeTapper.setIconTextGap(6);
         btnArcadeTapper.setFont(new Font("Consolas", Font.BOLD, 10));
         btnArcadeTapper.setForeground(RetroTheme.ACCENT_YELLOW);
         btnArcadeTapper.setFocusPainted(false);
@@ -739,6 +743,18 @@ public class CPUSchedulingPanel extends JPanel {
             lblMissionStatus.setText("✦ LIVE OUTPUT // ROUND ROBIN READY QUEUE & CPU REACTOR");
             updatePolicyIntel("ROUND ROBIN");
         }
+        recomputeAll();
+    }
+
+    public void loadManualExample() {
+        selectedAlgo = "FCFS";
+        if (quantumCard != null) quantumCard.setVisible(false);
+        lblMissionStatus.setText("✦ LIVE OUTPUT // FCFS READY QUEUE & CPU REACTOR");
+        updatePolicyIntel("FCFS");
+        inputModel.setRowCount(0);
+        inputModel.addRow(new Object[]{"J1", "0.0", "4.0", "1"});
+        inputModel.addRow(new Object[]{"J2", "1.0", "3.0", "1"});
+        inputModel.addRow(new Object[]{"J3", "2.0", "2.0", "1"});
         recomputeAll();
     }
 

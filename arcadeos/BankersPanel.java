@@ -37,6 +37,7 @@ public class BankersPanel extends JPanel {
 
         ctrl.add(btnAdd);
         ctrl.add(btnRemove);
+        btnRun.setMnemonic('S');
         ctrl.add(btnSmall);
         ctrl.add(btnLarge);
         ctrl.add(btnRun);
@@ -100,6 +101,11 @@ public class BankersPanel extends JPanel {
         tableModel.addRow(new Object[]{"P3", "0 6 3 2", "0 6 5 2"});
         tableModel.addRow(new Object[]{"P4", "0 0 1 4", "0 1 2 5"});
         tableModel.addRow(new Object[]{"P5", "1 0 1 0", "3 2 1 1"});
+    }
+
+    public void loadManualExample() {
+        loadSmallPreset();
+        runBankerSafety();
     }
 
     private void runBankerSafety() {

@@ -72,6 +72,7 @@ public class DiskSchedulingPanel extends JPanel {
         JButton btnSmall = RetroTheme.createRetroButton("Preset: Small (5)", new Color(35, 35, 60), RetroTheme.TEXT_WHITE);
         JButton btnLarge = RetroTheme.createRetroButton("Preset: Large (12)", new Color(35, 35, 60), RetroTheme.TEXT_WHITE);
         JButton btnRun = RetroTheme.createRetroButton("▶ RUN LASER HEAD", RetroTheme.ACCENT_YELLOW, Color.BLACK);
+        btnRun.setMnemonic('R');
 
         ctrl.add(btnSmall);
         ctrl.add(btnLarge);
@@ -120,6 +121,14 @@ public class DiskSchedulingPanel extends JPanel {
             txtRequests.setText("98 183 37 122 14 124 65 67 15 190 40 85");
         });
         btnRun.addActionListener(e -> runDiskScheduling());
+    }
+
+    public void loadManualExample() {
+        algoCombo.setSelectedItem("SSTF");
+        txtInitHead.setText("53");
+        txtDiskLimit.setText("199");
+        txtRequests.setText("98 183 37 122 14 124 65 67");
+        runDiskScheduling();
     }
 
     private void runDiskScheduling() {

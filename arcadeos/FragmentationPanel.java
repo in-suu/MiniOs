@@ -49,6 +49,7 @@ public class FragmentationPanel extends JPanel {
         JButton btnSmall = RetroTheme.createRetroButton("Preset: Small", new Color(35, 35, 60), RetroTheme.TEXT_WHITE);
         JButton btnLarge = RetroTheme.createRetroButton("Preset: Large", new Color(35, 35, 60), RetroTheme.TEXT_WHITE);
         JButton btnRun = RetroTheme.createRetroButton("▶ ALLOCATE RAM", RetroTheme.ACCENT_YELLOW, Color.BLACK);
+        btnRun.setMnemonic('A');
 
         ctrl.add(btnSmall);
         ctrl.add(btnLarge);
@@ -81,6 +82,13 @@ public class FragmentationPanel extends JPanel {
             txtProcesses.setText("120 400 220 50 300 480 180");
         });
         btnRun.addActionListener(e -> runFragmentation());
+    }
+
+    public void loadManualExample() {
+        algoCombo.setSelectedItem("First Fit");
+        txtBlocks.setText("100 500 200 300");
+        txtProcesses.setText("212");
+        runFragmentation();
     }
 
     private void runFragmentation() {

@@ -1,0 +1,191 @@
+{
+  "levels": [
+    {
+      "level": 1,
+      "name": "LIMIT CHECK",
+      "fallTimeSec": 7.0,
+      "edgeFallTimeSec": 9.1,
+      "segments": [
+        { "id": 0, "name": "Kernel", "base": 0, "limit": 600, "ro": true },
+        { "id": 1, "name": "Heap", "base": 1000, "limit": 400, "ro": false }
+      ],
+      "ships": [
+        { "t": 1.0, "seg": 1, "off": 120, "op": "r" },
+        { "t": 2.4, "seg": 1, "off": 380, "op": "w" },
+        { "t": 3.8, "seg": 0, "off": 250, "op": "r" },
+        { "t": 5.2, "seg": 1, "off": 430, "op": "r" },
+        { "t": 6.6, "seg": 1, "off": 300, "op": "r" },
+        { "t": 8.0, "seg": 0, "off": 90,  "op": "r" },
+        { "t": 9.4, "seg": 1, "off": 520, "op": "r" },
+        { "t": 10.8, "seg": 1, "off": 60, "op": "w" },
+        { "t": 12.2, "seg": 1, "off": 700, "op": "r" },
+        { "t": 13.6, "seg": 0, "off": 300, "op": "r" },
+        { "t": 15.0, "seg": 1, "off": 380, "op": "r" },
+        { "t": 16.4, "seg": 1, "off": 460, "op": "w" },
+        { "t": 17.8, "seg": 1, "off": 210, "op": "r" },
+        { "t": 19.2, "seg": 1, "off": 640, "op": "r" }
+      ]
+    },
+    {
+      "level": 2,
+      "name": "EDGE CASES",
+      "fallTimeSec": 6.0,
+      "edgeFallTimeSec": 7.8,
+      "segments": [
+        { "id": 0, "name": "Kernel", "base": 0, "limit": 600, "ro": true },
+        { "id": 1, "name": "Sprites", "base": 800, "limit": 700, "ro": false },
+        { "id": 2, "name": "Heap", "base": 2000, "limit": 600, "ro": false },
+        { "id": 3, "name": "Audio", "base": 3200, "limit": 300, "ro": false }
+      ],
+      "ships": [
+        { "t": 1.0, "seg": 1, "off": 699, "op": "r", "callout": "offset = limit-1 (699): the LAST legal byte - do NOT shoot." },
+        { "t": 3.0, "seg": 1, "off": 700, "op": "r", "callout": "offset = limit (700): off by one - this is a SEGFAULT, shoot it!" },
+        { "t": 5.0, "seg": 2, "off": 200, "op": "r" },
+        { "t": 6.5, "seg": 2, "off": 601, "op": "r", "callout": "offset = limit+1 (601): past the wall - SEGFAULT, shoot it." },
+        { "t": 8.0, "seg": 0, "off": 599, "op": "w", "callout": "a WRITE into a read-only segment is a PROTECTION FAULT - shoot it." },
+        { "t": 9.5, "seg": 0, "off": 599, "op": "r" },
+        { "t": 11.0, "seg": 3, "off": 299, "op": "r" },
+        { "t": 12.5, "seg": 3, "off": 300, "op": "r" },
+        { "t": 14.0, "seg": 2, "off": 300, "op": "w" },
+        { "t": 15.5, "seg": 1, "off": 100, "op": "r" },
+        { "t": 17.0, "seg": 2, "off": 600, "op": "r" },
+        { "t": 18.5, "seg": 1, "off": 350, "op": "w" },
+        { "t": 20.0, "seg": 0, "off": 100, "op": "r" },
+        { "t": 21.5, "seg": 3, "off": 301, "op": "r" },
+        { "t": 23.0, "seg": 2, "off": 599, "op": "r" }
+      ]
+    },
+    {
+      "level": 3,
+      "name": "PROTECTION BITS",
+      "fallTimeSec": 5.0,
+      "edgeFallTimeSec": 6.5,
+      "segments": [
+        { "id": 0, "name": "Kernel", "base": 0, "limit": 600, "ro": true },
+        { "id": 1, "name": "Sprites", "base": 800, "limit": 700, "ro": false },
+        { "id": 2, "name": "Text", "base": 2000, "limit": 400, "ro": true },
+        { "id": 3, "name": "Heap", "base": 3000, "limit": 600, "ro": false }
+      ],
+      "ships": [
+        { "t": 1.0, "seg": 0, "off": 200, "op": "r" },
+        { "t": 2.2, "seg": 0, "off": 200, "op": "w" },
+        { "t": 3.4, "seg": 2, "off": 100, "op": "r" },
+        { "t": 4.6, "seg": 2, "off": 100, "op": "w" },
+        { "t": 5.8, "seg": 1, "off": 300, "op": "w" },
+        { "t": 7.0, "seg": 2, "off": 399, "op": "w" },
+        { "t": 8.2, "seg": 3, "off": 550, "op": "w" },
+        { "t": 9.4, "seg": 0, "off": 599, "op": "r" },
+        { "t": 10.6, "seg": 2, "off": 250, "op": "r" },
+        { "t": 11.8, "seg": 3, "off": 650, "op": "r" },
+        { "t": 13.0, "seg": 1, "off": 690, "op": "w" },
+        { "t": 14.2, "seg": 0, "off": 5,   "op": "w" },
+        { "t": 15.4, "seg": 2, "off": 1,   "op": "w" },
+        { "t": 16.6, "seg": 3, "off": 200, "op": "r" },
+        { "t": 17.8, "seg": 1, "off": 100, "op": "r" }
+      ]
+    },
+    {
+      "level": 4,
+      "name": "BAD SELECTORS",
+      "fallTimeSec": 4.6,
+      "edgeFallTimeSec": 6.0,
+      "segments": [
+        { "id": 0, "name": "Kernel", "base": 0, "limit": 500, "ro": true },
+        { "id": 1, "name": "Sprites", "base": 800, "limit": 700, "ro": false },
+        { "id": 4, "name": "Audio", "base": 2000, "limit": 300, "ro": false },
+        { "id": 5, "name": "Save", "base": 4000, "limit": 600, "ro": false }
+      ],
+      "ships": [
+        { "t": 1.0, "seg": 1, "off": 200, "op": "r" },
+        { "t": 2.2, "seg": 2, "off": 120, "op": "r", "callout": "segment 2 is NOT in the table - it falls over the UNMAPPED gap. Shoot it." },
+        { "t": 3.4, "seg": 4, "off": 100, "op": "r" },
+        { "t": 4.6, "seg": 3, "off": 260, "op": "w" },
+        { "t": 5.8, "seg": 9, "off": 40,  "op": "r" },
+        { "t": 7.0, "seg": 5, "off": 500, "op": "w" },
+        { "t": 8.2, "seg": 0, "off": 120, "op": "r" },
+        { "t": 9.4, "seg": 7, "off": 900, "op": "w" },
+        { "t": 10.6, "seg": 4, "off": 299, "op": "r" },
+        { "t": 11.8, "seg": 1, "off": 700, "op": "r" },
+        { "t": 13.0, "seg": 6, "off": 10,  "op": "r" },
+        { "t": 14.2, "seg": 5, "off": 100, "op": "r" },
+        { "t": 15.4, "seg": 8, "off": 500, "op": "r" },
+        { "t": 16.6, "seg": 0, "off": 480, "op": "w" },
+        { "t": 17.8, "seg": 1, "off": 50,  "op": "w" }
+      ]
+    },
+    {
+      "level": 5,
+      "name": "STACK / HEAP GROWTH",
+      "mode": "MOVING",
+      "moveSec": 10,
+      "growthStep": 300,
+      "growSegment": 1,
+      "growInto": 2,
+      "fallTimeSec": 4.4,
+      "edgeFallTimeSec": 5.7,
+      "segments": [
+        { "id": 0, "name": "Kernel", "base": 0, "limit": 600, "ro": true },
+        { "id": 1, "name": "Stack", "base": 1000, "limit": 500, "ro": false },
+        { "id": 2, "name": "Heap", "base": 2600, "limit": 500, "ro": false },
+        { "id": 3, "name": "MMIO", "base": 6000, "limit": 400, "ro": false }
+      ],
+      "ships": [
+        { "t": 1.0, "seg": 1, "off": 120, "op": "r" },
+        { "t": 2.4, "seg": 2, "off": 200, "op": "w" },
+        { "t": 3.8, "seg": 0, "off": 200, "op": "r" },
+        { "t": 5.2, "seg": 1, "off": 480, "op": "w" },
+        { "t": 6.6, "seg": 2, "off": 520, "op": "r" },
+        { "t": 8.0, "seg": 3, "off": 100, "op": "r" },
+        { "t": 9.4, "seg": 1, "off": 300, "op": "r" },
+        { "t": 11.5, "seg": 2, "off": 300, "op": "r" },
+        { "t": 13.0, "seg": 3, "off": 399, "op": "w" },
+        { "t": 14.5, "seg": 1, "off": 499, "op": "r" },
+        { "t": 16.0, "seg": 0, "off": 500, "op": "w" },
+        { "t": 17.5, "seg": 2, "off": 100, "op": "r" },
+        { "t": 19.0, "seg": 3, "off": 410, "op": "r" },
+        { "t": 20.5, "seg": 1, "off": 60,  "op": "w" },
+        { "t": 22.0, "seg": 2, "off": 400, "op": "r" },
+        { "t": 23.5, "seg": 0, "off": 20,  "op": "r" },
+        { "t": 25.0, "seg": 1, "off": 200, "op": "r" },
+        { "t": 26.5, "seg": 2, "off": 480, "op": "r" },
+        { "t": 28.0, "seg": 0, "off": 300, "op": "r" },
+        { "t": 29.5, "seg": 3, "off": 200, "op": "w" },
+        { "t": 31.0, "seg": 1, "off": 520, "op": "r" },
+        { "t": 32.5, "seg": 2, "off": 120, "op": "w" },
+        { "t": 34.0, "seg": 3, "off": 420, "op": "r" },
+        { "t": 35.5, "seg": 1, "off": 40,  "op": "r" },
+        { "t": 37.0, "seg": 2, "off": 610, "op": "r" },
+        { "t": 38.5, "seg": 0, "off": 500, "op": "w" },
+        { "t": 40.0, "seg": 1, "off": 480, "op": "r" },
+        { "t": 41.5, "seg": 3, "off": 100, "op": "r" },
+        { "t": 43.0, "seg": 2, "off": 300, "op": "r" },
+        { "t": 44.5, "seg": 1, "off": 250, "op": "w" },
+        { "t": 46.0, "seg": 3, "off": 399, "op": "r" }
+      ]
+    },
+    {
+      "level": 6,
+      "name": "BOSS: BUFFER OVERFLOW",
+      "mode": "BOSS",
+      "bossHp": 24,
+      "fallTimeSec": 4.0,
+      "edgeFallTimeSec": 5.2,
+      "segments": [
+        { "id": 0, "name": "Kernel", "base": 0, "limit": 600, "ro": true },
+        { "id": 1, "name": "Sprites", "base": 1000, "limit": 800, "ro": false },
+        { "id": 2, "name": "Heap", "base": 3000, "limit": 600, "ro": false }
+      ],
+      "ships": [
+        { "t": 3.0, "seg": 1, "off": 200, "op": "r" },
+        { "t": 10.0, "seg": 2, "off": 300, "op": "w" },
+        { "t": 18.0, "seg": 0, "off": 200, "op": "r" },
+        { "t": 26.0, "seg": 1, "off": 780, "op": "r" },
+        { "t": 34.0, "seg": 2, "off": 610, "op": "r" },
+        { "t": 42.0, "seg": 0, "off": 100, "op": "w" },
+        { "t": 50.0, "seg": 1, "off": 100, "op": "r" },
+        { "t": 58.0, "seg": 3, "off": 50,  "op": "r" },
+        { "t": 66.0, "seg": 2, "off": 200, "op": "r" }
+      ]
+    }
+  ]
+}

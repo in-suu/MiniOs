@@ -39,6 +39,14 @@ public class SimulatorContainerPanel extends JPanel {
     };
 
     private int activeTab = 0;
+    private CPUSchedulingPanel cpuPanel;
+    private BankersPanel bankersPanel;
+    private PagingPanel pagingPanel;
+    private PageReplacementPanel pageReplacementPanel;
+    private SegmentationPanel segmentationPanel;
+    private FragmentationPanel fragmentationPanel;
+    private DiskSchedulingPanel diskSchedulingPanel;
+    private MultiprogrammingPanel multiprogrammingPanel;
 
     public SimulatorContainerPanel(ArcadeOS parent) {
         this.parentFrame = parent;
@@ -60,14 +68,22 @@ public class SimulatorContainerPanel extends JPanel {
         contentCards = new JPanel(cardLayout);
         contentCards.setOpaque(false);
 
-        contentCards.add(new CPUSchedulingPanel(), tabNames[0]);
-        contentCards.add(new BankersPanel(), tabNames[1]);
-        contentCards.add(new PagingPanel(), tabNames[2]);
-        contentCards.add(new PageReplacementPanel(), tabNames[3]);
-        contentCards.add(new SegmentationPanel(), tabNames[4]);
-        contentCards.add(new FragmentationPanel(), tabNames[5]);
-        contentCards.add(new DiskSchedulingPanel(), tabNames[6]);
-        contentCards.add(new MultiprogrammingPanel(), tabNames[7]);
+        cpuPanel = new CPUSchedulingPanel();
+        contentCards.add(cpuPanel, tabNames[0]);
+        bankersPanel = new BankersPanel();
+        contentCards.add(bankersPanel, tabNames[1]);
+        pagingPanel = new PagingPanel();
+        contentCards.add(pagingPanel, tabNames[2]);
+        pageReplacementPanel = new PageReplacementPanel();
+        contentCards.add(pageReplacementPanel, tabNames[3]);
+        segmentationPanel = new SegmentationPanel();
+        contentCards.add(segmentationPanel, tabNames[4]);
+        fragmentationPanel = new FragmentationPanel();
+        contentCards.add(fragmentationPanel, tabNames[5]);
+        diskSchedulingPanel = new DiskSchedulingPanel();
+        contentCards.add(diskSchedulingPanel, tabNames[6]);
+        multiprogrammingPanel = new MultiprogrammingPanel();
+        contentCards.add(multiprogrammingPanel, tabNames[7]);
 
         add(contentCards, BorderLayout.CENTER);
 
@@ -102,15 +118,15 @@ public class SimulatorContainerPanel extends JPanel {
         lblLogo.setForeground(Color.WHITE);
         left.add(lblLogo);
 
-        JButton btnSw = RetroTheme.createNavButton("👤", "", RetroTheme.TEXT_WHITE);
+        JButton btnSw = RetroTheme.createNavButton(new ImageIcon(PixelSprites.createUserIcon(14, RetroTheme.TEXT_WHITE)), "", RetroTheme.TEXT_WHITE);
         btnSw.setToolTipText("Switch Player");
         btnSw.addActionListener(e -> parentFrame.showScreen(ArcadeOS.SCREEN_LOGIN));
 
-        JButton btnLb = RetroTheme.createNavButton("🏆", "", RetroTheme.ACCENT_YELLOW);
+        JButton btnLb = RetroTheme.createNavButton(new ImageIcon(PixelSprites.createTrophyIcon(14, RetroTheme.ACCENT_YELLOW)), "", RetroTheme.ACCENT_YELLOW);
         btnLb.setToolTipText("Leaderboard");
         btnLb.addActionListener(e -> JOptionPane.showMessageDialog(this, "Leaderboard Active", "Scores", JOptionPane.INFORMATION_MESSAGE));
 
-        JButton btnLo = RetroTheme.createNavButton("⏻", "", RetroTheme.ACCENT_PINK);
+        JButton btnLo = RetroTheme.createNavButton(new ImageIcon(PixelSprites.createPowerIcon(14, RetroTheme.ACCENT_PINK)), "", RetroTheme.ACCENT_PINK);
         btnLo.setToolTipText("Log Out");
         btnLo.addActionListener(e -> parentFrame.showScreen(ArcadeOS.SCREEN_LOGIN));
 
@@ -124,7 +140,7 @@ public class SimulatorContainerPanel extends JPanel {
         tabButtons = new JButton[tabNames.length];
         for (int i = 0; i < tabNames.length; i++) {
             final int idx = i;
-            JButton btn = new JButton(tabIcons[i] + " " + tabNames[i]) {
+            JButton btn = new JButton(tabNames[i]) {
                 @Override
                 protected void paintComponent(Graphics g) {
                     Graphics2D g2 = (Graphics2D) g.create();
@@ -143,6 +159,8 @@ public class SimulatorContainerPanel extends JPanel {
                     super.paintComponent(g);
                 }
             };
+            btn.setIcon(new ImageIcon(PixelSprites.getTabIcon(idx, 12)));
+            btn.setIconTextGap(5);
             btn.setFont(new Font("Consolas", Font.BOLD, 10));
             btn.setForeground(activeTab == i ? RetroTheme.ACCENT_CYAN : RetroTheme.TEXT_DIM);
             btn.setFocusPainted(false);
@@ -161,11 +179,10 @@ public class SimulatorContainerPanel extends JPanel {
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 2));
         right.setOpaque(false);
 
-        JLabel coinIcon = new JLabel("🪙");
-        coinIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+        JLabel coinIcon = new JLabel(new ImageIcon(PixelSprites.getTabIcon(1, 14)));
         right.add(coinIcon);
 
-        lblXpScore = new JLabel("XP SCORE " + String.format("%06d", AppState.score + 125));
+        lblXpScore = new JLabel("XP SCORE " + AppState.getScoreFormatted());
         lblXpScore.setFont(new Font("Consolas", Font.BOLD, 12));
         lblXpScore.setForeground(RetroTheme.ACCENT_YELLOW);
         right.add(lblXpScore);
@@ -203,7 +220,9 @@ public class SimulatorContainerPanel extends JPanel {
         lblBreadcrumb.setForeground(Color.WHITE);
         left.add(lblBreadcrumb);
 
-        JButton btnOpenManual = new JButton("📖 MANUAL");
+        JButton btnOpenManual = new JButton("MANUAL");
+        btnOpenManual.setIcon(new ImageIcon(PixelSprites.getTabIcon(2, 11)));
+        btnOpenManual.setIconTextGap(4);
         btnOpenManual.setFont(new Font("Consolas", Font.BOLD, 10));
         btnOpenManual.setForeground(RetroTheme.ACCENT_YELLOW);
         btnOpenManual.setOpaque(false);
@@ -216,13 +235,16 @@ public class SimulatorContainerPanel extends JPanel {
         btnOpenManual.addActionListener(e -> {
             ArchiveManualDialog dialog = new ArchiveManualDialog(parentFrame, null, activeTab);
             dialog.setVisible(true);
+            // Claiming the manual's +50 XP happens inside the modal dialog; pull the new
+            // total back into the header once it closes.
+            refreshScore();
         });
         left.add(btnOpenManual);
 
         bar.add(left, BorderLayout.WEST);
 
-        // Right pill: [ GUEST MODE // READ ONLY ]
-        JLabel pill = new JLabel(AppState.isGuest ? " [ GUEST MODE // READ ONLY ] " : " [ ARCHIVIST SESSION // ACTIVE ] ");
+        // Right pill: clarify that the guest table is still editable - only progress is not saved.
+        JLabel pill = new JLabel(AppState.isGuest ? " [ GUEST - PROGRESS NOT SAVED ] " : " [ ARCHIVIST SESSION // ACTIVE ] ");
         pill.setFont(new Font("Consolas", Font.BOLD, 9));
         pill.setForeground(AppState.isGuest ? new Color(200, 100, 150) : RetroTheme.ACCENT_GREEN);
         pill.setBorder(BorderFactory.createLineBorder(AppState.isGuest ? RetroTheme.BORDER_COLOR : RetroTheme.ACCENT_GREEN, 1));
@@ -257,8 +279,9 @@ public class SimulatorContainerPanel extends JPanel {
         center.add(lblEsc);
         bar.add(center, BorderLayout.CENTER);
 
-        String userTag = String.format("> CURRENT USER: %s [SCORE: %s] [GUEST MODE]",
-                AppState.playerName, AppState.getScoreFormatted());
+        String userTag = String.format("> CURRENT USER: %s [SCORE: %s] [%s]",
+                AppState.playerName, AppState.getScoreFormatted(),
+                AppState.isGuest ? "GUEST - PROGRESS NOT SAVED" : "ARCHIVIST SESSION");
         JLabel lblRight = new JLabel(userTag);
         lblRight.setFont(new Font("Consolas", Font.BOLD, 9));
         lblRight.setForeground(RetroTheme.ACCENT_PINK);
@@ -269,6 +292,35 @@ public class SimulatorContainerPanel extends JPanel {
         bar.add(lblRight, BorderLayout.EAST);
 
         return bar;
+    }
+
+    /** Re-reads the global score into the header counter (score changes in dialogs). */
+    public void refreshScore() {
+        if (lblXpScore != null) {
+            lblXpScore.setText("XP SCORE " + AppState.getScoreFormatted());
+        }
+    }
+
+    public PagingPanel getPagingPanel() {
+        return pagingPanel;
+    }
+
+    public void loadPagingManualExample() {
+        loadManualExample(2);
+    }
+
+    public void loadManualExample(int manualIndex) {
+        selectTab(manualIndex);
+        switch (manualIndex) {
+            case 0: if (cpuPanel != null) cpuPanel.loadManualExample(); break;
+            case 1: if (bankersPanel != null) bankersPanel.loadManualExample(); break;
+            case 2: if (pagingPanel != null) pagingPanel.loadManualExample(); break;
+            case 3: if (pageReplacementPanel != null) pageReplacementPanel.loadManualExample(); break;
+            case 4: if (segmentationPanel != null) segmentationPanel.loadManualExample(); break;
+            case 5: if (fragmentationPanel != null) fragmentationPanel.loadManualExample(); break;
+            case 6: if (diskSchedulingPanel != null) diskSchedulingPanel.loadManualExample(); break;
+            case 7: if (multiprogrammingPanel != null) multiprogrammingPanel.loadManualExample(); break;
+        }
     }
 
     public void selectTab(int index) {
@@ -285,6 +337,7 @@ public class SimulatorContainerPanel extends JPanel {
 
         // Flip CardLayout
         cardLayout.show(contentCards, tabNames[index]);
+        refreshScore();
         repaint();
     }
 }

@@ -69,8 +69,8 @@ public class KernelTapperDialog extends JDialog {
     private BufferedImage playerSprite;
 
     public KernelTapperDialog(JFrame parent, String initialAlgo, List<CPUSchedulingPanel.SimJob> customJobs) {
-        super(parent, "CAPCOM // KERNEL TAPPER: CPU DISPATCH RUNWAY", true);
-        setSize(960, 680);
+        super(parent, "PIXELFORGE // KERNEL TAPPER: CPU DISPATCH RUNWAY", true);
+        setSize(RetroTheme.getClampedDialogSize(parent, 960, 680));
         setResizable(false);
         setLocationRelativeTo(parent);
         getContentPane().setBackground(RetroTheme.BG_DARK);
@@ -373,7 +373,7 @@ public class KernelTapperDialog extends JDialog {
             if (a.x <= COUNTER_X + 20) {
                 lives--;
                 triggerExplosion(a.x, a.y, RetroTheme.ACCENT_PINK, 20);
-                feedbackBanner = "★ STARVATION HAZARD! " + a.pid + " REACHED CPU! -1 CORE";
+                feedbackBanner = "[!] STARVATION HAZARD: " + a.pid + " REACHED CPU! -1 CORE";
                 bannerColor = RetroTheme.ACCENT_PINK;
                 bannerTimer = 120;
                 a.x = RUNWAY_END_X - 100; // Knock back on starvation strike
@@ -413,7 +413,7 @@ public class KernelTapperDialog extends JDialog {
                         score += 150;
                         AppState.addScore(15);
                         triggerExplosion(a.x, a.y, RetroTheme.ACCENT_GREEN, 25);
-                        feedbackBanner = "✔ PROCESS " + a.pid + " TERMINATED! +150 PTS";
+                        feedbackBanner = "[OK] PROCESS " + a.pid + " TERMINATED! +150 PTS";
                         bannerColor = RetroTheme.ACCENT_GREEN;
                         bannerTimer = 90;
                     } else {
@@ -435,7 +435,7 @@ public class KernelTapperDialog extends JDialog {
         // 3. Victory Condition
         if (allFinished && !aliens.isEmpty()) {
             isVictory = true;
-            feedbackBanner = "★ VICTORY! ALL JOBS DISPATCHED UNDER " + currentMode.code + "! ★";
+            feedbackBanner = "[*] VICTORY! ALL JOBS DISPATCHED UNDER " + currentMode.code + "! [*]";
             bannerColor = RetroTheme.ACCENT_GREEN;
             AppState.addScore(150);
         }
@@ -652,12 +652,12 @@ public class KernelTapperDialog extends JDialog {
 
             // 9. Overlay Screens (Victory / Game Over)
             if (isVictory) {
-                renderOverlayCard(g2, w, h, "★ FLIGHT CLEARED: S-RANK DISPATCH ★",
+                renderOverlayCard(g2, w, h, "[*] FLIGHT CLEARED: S-RANK DISPATCH [*]",
                         "All alien processes cleared under " + currentMode.code + " rules!",
                         "FINAL SCORE: " + score + " PTS  |  BONUS: +150 XP AWARDED",
                         RetroTheme.ACCENT_GREEN);
             } else if (isGameOver) {
-                renderOverlayCard(g2, w, h, "☠ SYSTEM CRASH: CPU STARVATION ☠",
+                renderOverlayCard(g2, w, h, "[!] SYSTEM CRASH: CPU STARVATION [!]",
                         "Processes collided with the counter before getting CPU time.",
                         "PRESS [R] TO RETRY MISSION OR [ESC] TO EXIT",
                         RetroTheme.ACCENT_PINK);

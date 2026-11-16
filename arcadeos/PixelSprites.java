@@ -271,6 +271,217 @@ public class PixelSprites {
         return scale(img, size);
     }
 
+    /** 8-bit Cyber Frog / Hopper Packet Sprite */
+    public static BufferedImage createFrogSprite(int size, Color c) {
+        BufferedImage img = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
+        
+        // Eyes
+        g.setColor(c);
+        g.fillRect(2, 1, 3, 3);
+        g.fillRect(11, 1, 3, 3);
+        // Pupils
+        g.setColor(Color.WHITE);
+        g.fillRect(3, 2, 1, 1);
+        g.fillRect(12, 2, 1, 1);
+        // Head & Body
+        g.setColor(c);
+        g.fillRect(4, 3, 8, 3);
+        g.fillRect(3, 6, 10, 5);
+        g.fillRect(4, 11, 8, 2);
+        // Front feet
+        g.fillRect(1, 4, 2, 3);
+        g.fillRect(13, 4, 2, 3);
+        // Back legs & feet
+        g.fillRect(1, 9, 2, 4);
+        g.fillRect(13, 9, 2, 4);
+        g.fillRect(0, 13, 3, 2);
+        g.fillRect(13, 13, 3, 2);
+        // Neon cyber chest core
+        g.setColor(new Color(5, 217, 232));
+        g.fillRect(7, 7, 2, 3);
+
+        g.dispose();
+        return scale(img, size);
+    }
+
+    /** 8-bit IC Microchip / Interrupt Hazard Sprite */
+    public static BufferedImage createChipHazardSprite(int size, Color c) {
+        BufferedImage img = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
+
+        // Chip body
+        g.setColor(c);
+        g.fillRect(3, 3, 10, 10);
+        // IC Pins on left & right
+        g.setColor(new Color(220, 220, 240));
+        g.fillRect(1, 4, 2, 1);
+        g.fillRect(1, 7, 2, 1);
+        g.fillRect(1, 10, 2, 1);
+        g.fillRect(13, 4, 2, 1);
+        g.fillRect(13, 7, 2, 1);
+        g.fillRect(13, 10, 2, 1);
+        // Pin 1 indicator dot
+        g.setColor(Color.YELLOW);
+        g.fillRect(4, 4, 2, 2);
+
+        g.dispose();
+        return scale(img, size);
+    }
+
+    /** 16-bit User Profile Icon (Pixel Art) */
+    public static BufferedImage createUserIcon(int size, Color c) {
+        BufferedImage img = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
+        g.setColor(c);
+        // Head
+        g.fillRect(6, 2, 4, 4);
+        // Neck
+        g.fillRect(7, 6, 2, 2);
+        // Shoulders / Torso
+        g.fillRect(3, 8, 10, 6);
+        g.dispose();
+        return scale(img, size);
+    }
+
+    /** 16-bit Trophy / Leaderboard Icon (Pixel Art) */
+    public static BufferedImage createTrophyIcon(int size, Color c) {
+        BufferedImage img = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
+        g.setColor(c);
+        // Cup Rim & Body
+        g.fillRect(4, 2, 8, 2);
+        g.fillRect(5, 4, 6, 4);
+        g.fillRect(6, 8, 4, 2);
+        // Handles
+        g.fillRect(2, 3, 2, 4);
+        g.fillRect(12, 3, 2, 4);
+        // Stem
+        g.fillRect(7, 10, 2, 3);
+        // Base
+        g.fillRect(4, 13, 8, 2);
+        g.dispose();
+        return scale(img, size);
+    }
+
+    /** 16-bit Power / Logout Icon (Pixel Art) */
+    public static BufferedImage createPowerIcon(int size, Color c) {
+        BufferedImage img = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
+        g.setColor(c);
+        // Outer circular ring with top opening
+        g.fillRect(4, 3, 2, 8);
+        g.fillRect(10, 3, 2, 8);
+        g.fillRect(4, 11, 8, 2);
+        // Center vertical switch line
+        g.setColor(Color.WHITE);
+        g.fillRect(7, 2, 2, 6);
+        g.dispose();
+        return scale(img, size);
+    }
+
+    /** Voltage Glitch / Lightning Hazard Sprite */
+    public static BufferedImage createGlitchHazardSprite(int width, int height, Color c) {
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
+        g.setColor(c);
+        // Jagged lightning pulse
+        int midY = height / 2;
+        int[] xs = { 2, width / 3, width / 2 - 2, 2 * width / 3, width - 4, 2 * width / 3 - 2, width / 2 + 2, width / 3 - 2 };
+        int[] ys = { midY, 2, midY + 2, 2, midY, height - 3, midY - 2, height - 3 };
+        g.fillPolygon(xs, ys, 8);
+        // White core highlight
+        g.setColor(Color.WHITE);
+        g.fillRect(width / 3, midY - 1, width / 3, 3);
+        g.dispose();
+        return img;
+    }
+
+    /** Heavy DMA / I-O Transport Truck Hazard Sprite */
+    public static BufferedImage createTruckHazardSprite(int width, int height, Color c) {
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
+        g.setColor(c);
+        // Main trailer body
+        g.fillRect(2, 3, width - 14, height - 8);
+        // Cab front
+        g.setColor(new Color(255, 120, 60));
+        g.fillRect(width - 12, 6, 10, height - 11);
+        // Windshield
+        g.setColor(new Color(180, 240, 255));
+        g.fillRect(width - 8, 7, 5, 4);
+        // Wheels
+        g.setColor(new Color(220, 220, 230));
+        g.fillRect(6, height - 4, 6, 4);
+        g.fillRect(width - 12, height - 4, 6, 4);
+        g.dispose();
+        return img;
+    }
+
+    /** 8 Arcade Module Tab Icons (Clean Pixel Art) */
+    public static BufferedImage getTabIcon(int idx, int size) {
+        BufferedImage img = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
+        switch (idx) {
+            case 0: // 01 CPU: Chip with pins
+                g.setColor(new Color(255, 211, 25));
+                g.fillRect(3, 3, 10, 10);
+                g.setColor(new Color(40, 26, 70));
+                g.fillRect(5, 5, 6, 6);
+                g.setColor(Color.WHITE);
+                g.fillRect(1, 4, 2, 2); g.fillRect(1, 10, 2, 2);
+                g.fillRect(13, 4, 2, 2); g.fillRect(13, 10, 2, 2);
+                break;
+            case 1: // 02 BANKER: Coin / Safe
+                g.setColor(new Color(255, 211, 25));
+                g.fillOval(3, 2, 10, 12);
+                g.setColor(new Color(180, 140, 10));
+                g.drawOval(3, 2, 9, 11);
+                g.setColor(Color.BLACK);
+                g.fillRect(7, 5, 2, 6);
+                break;
+            case 2: // 03 PAGING: Memory Map / Page Slots
+                g.setColor(new Color(5, 217, 232));
+                g.fillRect(2, 2, 12, 12);
+                g.setColor(new Color(10, 14, 28));
+                g.fillRect(4, 4, 3, 3); g.fillRect(9, 4, 3, 3);
+                g.fillRect(4, 9, 3, 3); g.fillRect(9, 9, 3, 3);
+                break;
+            case 3: // 04 CACHE: Circular Swap Arrows
+                g.setColor(new Color(180, 70, 255));
+                g.drawArc(2, 2, 11, 11, 45, 270);
+                g.fillRect(8, 1, 3, 3); g.fillRect(11, 11, 3, 3);
+                break;
+            case 4: // 05 SEGMENT: Segment brackets
+                g.setColor(new Color(255, 42, 141));
+                g.fillRect(2, 2, 4, 2); g.fillRect(2, 2, 2, 12); g.fillRect(2, 12, 4, 2);
+                g.fillRect(10, 2, 4, 2); g.fillRect(12, 2, 2, 12); g.fillRect(10, 12, 4, 2);
+                break;
+            case 5: // 06 RAM: Memory Partition Bricks
+                g.setColor(new Color(57, 255, 20));
+                g.fillRect(2, 2, 12, 5);
+                g.fillRect(2, 9, 12, 5);
+                g.setColor(Color.BLACK);
+                g.drawLine(7, 2, 7, 7); g.drawLine(9, 9, 9, 14);
+                break;
+            case 6: // 07 DISK: Platter disk
+                g.setColor(new Color(220, 220, 240));
+                g.fillOval(2, 2, 12, 12);
+                g.setColor(new Color(40, 30, 70));
+                g.fillOval(6, 6, 4, 4);
+                break;
+            case 7: // 08 MULTIPROG: Lightning concurrency
+            default:
+                g.setColor(new Color(255, 211, 25));
+                int[] px = { 9, 5, 8, 4, 12, 8 };
+                int[] py = { 2, 7, 7, 14, 6, 6 };
+                g.fillPolygon(px, py, 6);
+                break;
+        }
+        g.dispose();
+        return scale(img, size);
+    }
+
     private static BufferedImage scale(BufferedImage src, int size) {
         BufferedImage dest = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = dest.createGraphics();

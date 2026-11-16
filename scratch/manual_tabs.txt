@@ -1,0 +1,72 @@
+===== MANUAL 03 — PAGING & ADDRESS TRANSLATION — 02 FORMULAS =====
+╔════════════════════════════════════════════════════════════════════════╗
+║ 2. MATHEMATICAL TRANSLATION FORMULAS & TLB METRICS                     ║
+╚════════════════════════════════════════════════════════════════════════╝
+┌─────────────────────────┬──────────────────────────────────────────────┐
+│ PARAMETER / FORMULA     │ MATHEMATICAL DEFINITION                      │
+├─────────────────────────┼──────────────────────────────────────────────┤
+│ Page Number (p)         │ p = A / S (integer division)                 │
+│ Page Offset (d)         │ d = A % S                                    │
+│ Physical Address (P)    │ P = f * S + d                                │
+│ Total Page Table Size   │ Entries = Logical_Address_Space / Page_Size  │
+│ Total Physical Frames   │ Frames  = Physical_RAM / Frame_Size          │
+│ Effective Access (EAT)  │ EAT = h(t_tlb+t_ram) + (1-h)(t_tlb+2*t_ram)  │
+└─────────────────────────┴──────────────────────────────────────────────┘
+
+CALCULATION RUNWAY (SAMPLE ADDRESS TRANSLATION):
+  • Given : S = 4096 bytes (2^12), A = 13000
+  • Step 1: p = A / S = 13000 / 4096 = 3 (integer division)
+  • Step 2: d = A % S = 13000 % 4096 = 712 bytes
+  • Step 3: Page Table Lookup: If PageTable[3] = Frame 7
+  • Step 4: P = f * S + d = (7 * 4096) + 712 = 29384 in RAM.
+
+===== MANUAL 03 — PAGING & ADDRESS TRANSLATION — 05 CHEAT SHEET =====
+╔════════════════════════════════════════════════════════════════════════╗
+║ 5. EXAM CHEAT-SHEET & VIRTUAL MEMORY COMPARISON MATRIX                 ║
+╚════════════════════════════════════════════════════════════════════════╝
+┌────────────────────┬──────────────────────┬────────────────────────────┐
+│ MEMORY MODEL       │ ADVANTAGES           │ DISADVANTAGES & TRAPS      │
+├────────────────────┼──────────────────────┼────────────────────────────┤
+│ Contiguous Part    │ Simple hardware      │ Severe external frag       │
+│ Pure Paging        │ No external frag     │ Internal frag on last pg   │
+│ Inverted Page Table│ Compact table RAM    │ Slow hash chain search     │
+│ Multi-Level Paging │ Supports 64-bit space│ 4+ memory access penalty   │
+└────────────────────┴──────────────────────┴────────────────────────────┘
+
+★ INTERNAL FRAGMENTATION IN PAGING:
+  Paging completely stops external fragmentation, but incurs internal
+  fragmentation on the final page of a process (average 0.5 * Page Size).
+
+★ OFFSET NEVER CHANGES:
+  Logical Address = [p | d] -> Physical Address = [f | d].
+  Offset 'd' is copied directly into physical RAM; only 'p' is translated!
+
+===== MANUAL 01 — CPU PROCESS SCHEDULING — 01 THEORY =====
+╔════════════════════════════════════════════════════════════════════════╗
+║ 1. EXECUTIVE OVERVIEW & ARCHITECTURE                                   ║
+╚════════════════════════════════════════════════════════════════════════╝
+The CPU Scheduler is responsible for allocating the execution core to
+one of the runnable processes currently residing in the READY QUEUE.
+
+PROCESS STATE TRANSITION DIAGRAM:
+┌───────┐ admit ┌───────┐ dispatch ┌─────────┐ exit ┌────────────┐
+│  NEW  │ ────> │ READY │ ───────> │ RUNNING │ ───> │ TERMINATED │
+└───────┘       └───────┘          └─────────┘      └────────────┘
+                    ▲                   │
+                    │   I/O Complete    ▼  I/O or Event Wait
+                    └────────────── ┌─────────┐
+                                    │ WAITING │
+                                    └─────────┘
+
+2. FOUR SCHEDULING CRITERIA:
+  • FCFS (First-Come, First-Served) :
+    Non-preemptive. Strict FIFO queue ordered by Arrival Time.
+
+  • SJF (Shortest Job First) :
+    Non-preemptive. Selects process with smallest Burst Time.
+
+  • SRTF (Shortest Remaining Time) :
+    Preemptive SJF. Preempts current job if new job has smaller burst.
+
+  • Round Robin (RR) :
+    Preemptive with Time Quantum (TQ). Enforces fair timesharing.

@@ -24,6 +24,9 @@ public class RetroTheme {
     public static final Color INPUT_BG      = new Color(14, 10, 30);
     public static final Color ROW_EVEN      = new Color(18, 13, 36);
     public static final Color ROW_ODD       = new Color(22, 16, 44);
+    // Red tint used to flag conflicting table rows (e.g. overlapping segments).
+    public static final Color OVERLAP_BG    = new Color(74, 16, 28);
+    public static final Color OVERLAP_FG    = new Color(255, 138, 158);
 
     // ── Fonts ─────────────────────────────────────────────────────────────────
     public static final Font FONT_XL    = new Font("Consolas", Font.BOLD, 22);
@@ -85,9 +88,29 @@ public class RetroTheme {
         return btn;
     }
 
-    /** Nav-bar small tab-style button */
+    /** Nav-bar small tab-style button with Text/Emoji */
     public static JButton createNavButton(String icon, String label, Color fg) {
-        JButton btn = new JButton(icon + " " + label);
+        JButton btn = new JButton(icon.isEmpty() ? label : (icon + " " + label));
+        btn.setFont(FONT_XS);
+        btn.setBackground(BTN_DARK);
+        btn.setForeground(fg);
+        btn.setFocusPainted(false);
+        btn.setOpaque(true);
+        btn.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(BORDER_COLOR, 1),
+                BorderFactory.createEmptyBorder(3, 8, 3, 8)
+        ));
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return btn;
+    }
+
+    /** Nav-bar small button with Pixel Icon sprite (guaranteed no broken glyphs!) */
+    public static JButton createNavButton(Icon icon, String label, Color fg) {
+        JButton btn = new JButton(label);
+        if (icon != null) {
+            btn.setIcon(icon);
+            btn.setIconTextGap(4);
+        }
         btn.setFont(FONT_XS);
         btn.setBackground(BTN_DARK);
         btn.setForeground(fg);
@@ -130,12 +153,27 @@ public class RetroTheme {
 
     // ── Table Factory ─────────────────────────────────────────────────────────
     public static JTable createRetroTable(javax.swing.table.DefaultTableModel model) {
+        return createRetroTable(model, null);
+    }
+
+    /**
+     * Table variant that tints "flagged" rows red (e.g. segments whose
+     * [base, base+limit) range overlaps another segment). Pass {@code null}
+     * for {@code flaggedRow} to get the standard look.
+     */
+    public static JTable createRetroTable(javax.swing.table.DefaultTableModel model,
+                                          java.util.function.IntPredicate flaggedRow) {
         JTable table = new JTable(model) {
             @Override public Component prepareRenderer(javax.swing.table.TableCellRenderer r, int row, int col) {
                 Component c = super.prepareRenderer(r, row, col);
                 if (!isRowSelected(row)) {
-                    c.setBackground(row % 2 == 0 ? ROW_EVEN : ROW_ODD);
-                    c.setForeground(TEXT_WHITE);
+                    if (flaggedRow != null && flaggedRow.test(row)) {
+                        c.setBackground(OVERLAP_BG);
+                        c.setForeground(OVERLAP_FG);
+                    } else {
+                        c.setBackground(row % 2 == 0 ? ROW_EVEN : ROW_ODD);
+                        c.setForeground(TEXT_WHITE);
+                    }
                 } else {
                     c.setBackground(new Color(80, 30, 100));
                     c.setForeground(ACCENT_CYAN);
@@ -229,5 +267,19 @@ public class RetroTheme {
         UIManager.put("ToolTip.foreground",            ACCENT_CYAN);
         UIManager.put("ToolTip.font",                  FONT_XS);
         UIManager.put("Table.alternateRowColor",       ROW_ODD);
+    }
+
+    /**
+     * Calculates a dialog size that never exceeds the usable desktop bounds
+     * (accounting for multi-monitors, taskbars, and display scaling).
+     */
+    public static Dimension getClampedDialogSize(Component parent, int targetW, int targetH) {
+        GraphicsConfiguration gc = (parent != null) ? parent.getGraphicsConfiguration()
+                : GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+        Rectangle b = (gc != null) ? gc.getBounds() : new Rectangle(0, 0, 1024, 768);
+        Insets insets = (gc != null) ? Toolkit.getDefaultToolkit().getScreenInsets(gc) : new Insets(0, 0, 0, 0);
+        int maxW = Math.max(400, b.width - insets.left - insets.right - 20);
+        int maxH = Math.max(300, b.height - insets.top - insets.bottom - 20);
+        return new Dimension(Math.min(targetW, maxW), Math.min(targetH, maxH));
     }
 }

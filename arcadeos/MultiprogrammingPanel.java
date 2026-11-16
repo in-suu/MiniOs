@@ -34,6 +34,7 @@ public class MultiprogrammingPanel extends JPanel {
         JButton btnSmall = RetroTheme.createRetroButton("Preset: 3 Games", new Color(35, 35, 60), RetroTheme.TEXT_WHITE);
         JButton btnLarge = RetroTheme.createRetroButton("Preset: 7 Games", new Color(35, 35, 60), RetroTheme.TEXT_WHITE);
         JButton btnSim = RetroTheme.createRetroButton("▶ RUN CONCURRENCY TICK", RetroTheme.ACCENT_YELLOW, Color.BLACK);
+        btnSim.setMnemonic('D');
 
         ctrl.add(btnAdd);
         ctrl.add(btnRemove);
@@ -132,6 +133,11 @@ public class MultiprogrammingPanel extends JPanel {
         procModel.addRow(new Object[]{"Network_Scores",   "64",  "5",  "Ready"});
         procModel.addRow(new Object[]{"CRT_Renderer",     "400", "20", "Ready"});
         procModel.addRow(new Object[]{"Coin_Sensor_Poller","32",  "5",  "Ready"});
+    }
+
+    public void loadManualExample() {
+        loadSmallPreset();
+        runMultiprogramming();
     }
 
     private void runMultiprogramming() {

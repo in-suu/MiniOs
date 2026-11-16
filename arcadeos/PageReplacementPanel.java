@@ -51,6 +51,7 @@ public class PageReplacementPanel extends JPanel {
         JButton btnSmall = RetroTheme.createRetroButton("Preset: Small (8)", new Color(35, 35, 60), RetroTheme.TEXT_WHITE);
         JButton btnLarge = RetroTheme.createRetroButton("Preset: Large (20)", new Color(35, 35, 60), RetroTheme.TEXT_WHITE);
         JButton btnRun = RetroTheme.createRetroButton("▶ SIMULATE SWAP", RetroTheme.ACCENT_YELLOW, Color.BLACK);
+        btnRun.setMnemonic('S');
 
         ctrl.add(btnSmall);
         ctrl.add(btnLarge);
@@ -83,6 +84,13 @@ public class PageReplacementPanel extends JPanel {
             txtRefString.setText("7 0 1 2 0 3 0 4 2 3 0 3 2 1 2 0 1 7 0 1");
         });
         btnRun.addActionListener(e -> runPageReplacement());
+    }
+
+    public void loadManualExample() {
+        algoCombo.setSelectedItem("LRU");
+        txtFrames.setText("3");
+        txtRefString.setText("7 0 1 2 0 3 0 4");
+        runPageReplacement();
     }
 
     private void runPageReplacement() {
